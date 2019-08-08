@@ -1,18 +1,18 @@
 // Setting up RENDERER, SCENE AND CAMERA
-var renderer = new THREE.WebGLRenderer({antialias: true});
+let renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 500);
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 500);
 camera.position.set(35, 10, 0);
 camera.lookAt(0, 0, 0);
 
-var scene = new THREE.Scene();
+let scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
 // LIGHTS
-var ambientLight = new THREE.AmbientLight(0xFF7777, 0.5);	// 0.2
-var light = new THREE.DirectionalLight(0xFFFFFFF, 1.0);
+let ambientLight = new THREE.AmbientLight(0xFF7777, 0.5);	// 0.2
+let light = new THREE.DirectionalLight(0xFFFFFFF, 1.0);
 light.position.set(30, 200, 0).normalize();
 
 // direction is set in GUI
@@ -20,13 +20,32 @@ scene.add(ambientLight);
 scene.add(light);
         
 // OBJECTS
-var geometry_sun = new THREE.SphereGeometry(5, 24, 24);
-var material_sun = new THREE.MeshPhongMaterial({color: 0xFFC303});
-var sun = new THREE.Mesh(geometry_sun, material_sun);
 
-var geometry_earth = new THREE.SphereGeometry(1, 24, 24);
-var material_earth = new THREE.MeshPhongMaterial({color: 0x00AAFA});
-var earth = new THREE.Mesh(geometry_earth, material_earth);
+//This will add a starfield to the background of a scene
+let starsGeometry = new THREE.Geometry();
+
+for (k = 0; k < 10000; k ++) {
+	let star = new THREE.Vector3();
+	star.x = THREE.Math.randFloatSpread(1800);
+	star.y = THREE.Math.randFloatSpread(1800);
+	star.z = THREE.Math.randFloatSpread(1800);
+
+	starsGeometry.vertices.push(star);
+}
+
+let starsMaterial = new THREE.PointsMaterial({ color: 0xF0F0F0 });
+let starField = new THREE.Points(starsGeometry, starsMaterial);
+scene.add(starField);
+
+// Adding sun
+let geometry_sun = new THREE.SphereGeometry(5, 24, 24);
+let material_sun = new THREE.MeshPhongMaterial({color: 0xFFC303});
+let sun = new THREE.Mesh(geometry_sun, material_sun);
+
+// Earth - the only planet in the beggining
+let geometry_earth = new THREE.SphereGeometry(1, 24, 24);
+let material_earth = new THREE.MeshPhongMaterial({color: 0x00AAFA});
+let earth = new THREE.Mesh(geometry_earth, material_earth);
 
 scene.add(sun);
 scene.add(earth);
@@ -53,7 +72,7 @@ function animate() {
   requestAnimationFrame(animate);
 
   // Axis rotation
-  sun.rotation.y += 0.005;
+  sun.rotation.y += 0.025;
 
   // Orbit
   for (let j = 0; j < planets.length; j++) {
@@ -70,8 +89,8 @@ animate();
 // User controls
 // zoom in and out
 function onScroll(event) {
-  var fovMAX = 160;
-  var fovMIN = 1;
+  let fovMAX = 160;
+  let fovMIN = 1;
   camera.fov -= event.wheelDeltaY / 180;
   camera.fov = Math.max(Math.min(camera.fov, fovMAX), fovMIN);
   camera.updateProjectionMatrix();
@@ -103,9 +122,13 @@ function onKeyDown(event) {
 
 let r = 15;
 
+document.addEventListener('mousewheel', onScroll);
+document.addEventListener('keydown', onKeyDown);
+
+// Add planet functionality
 document.getElementById('add-planet').onclick = function () {
   let color = Math.random() * 0xFFC303;
-  let geometry = new THREE.SphereGeometry(1, 24, 24);
+  let geometry = new THREE.SphereGeometry(Math.random() * 2 + 0.5, 24, 24);
   let material = new THREE.MeshPhongMaterial({color});
   let planet = new THREE.Mesh(geometry, material);
   planets.push(planet);
@@ -113,6 +136,3 @@ document.getElementById('add-planet').onclick = function () {
   scene.add(planet);
   r += 5;
 }
-
-document.addEventListener('mousewheel', onScroll);
-document.addEventListener('keydown', onKeyDown);
