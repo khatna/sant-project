@@ -38,8 +38,9 @@ planets.push(earth);
 function makeCircle(r) {
   let points = [];
   let incr = Math.random() * (0.1 - 0.005) + 0.005;
-  for (alpha = 0; alpha < 2 * Math.PI; alpha += incr) {
-    points.push([r*Math.cos(alpha), r*Math.sin(alpha)]);
+  let alpha = Math.random() * 2 * Math.PI;
+  for (beta = 0; beta < 2 * Math.PI; beta += incr) {
+    points.push([r*Math.cos(alpha + beta), r*Math.sin(alpha + beta)]);
   }
   return points;
 }
