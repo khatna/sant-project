@@ -1,3 +1,5 @@
+const THREE = require('three');
+
 // Setting up RENDERER, SCENE AND CAMERA
 let renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
