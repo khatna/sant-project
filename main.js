@@ -1,4 +1,4 @@
-const THREE = require('three');
+// const THREE = require('three');
 
 // Setting up RENDERER, SCENE AND CAMERA
 let renderer = new THREE.WebGLRenderer({antialias: true});
@@ -6,8 +6,10 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 500);
+var controls = new THREE.TrackballControls( camera, renderer.domElement );
 camera.position.set(35, 10, 0);
 camera.lookAt(0, 0, 0);
+controls.update();
 
 let scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
@@ -84,50 +86,15 @@ function animate() {
   } i++;
 
   renderer.render(scene, camera);
+  controls.update();
 }
 
 animate();
 
 // User controls
-// zoom in and out
-function onScroll(event) {
-  let fovMAX = 160;
-  let fovMIN = 1;
-  camera.fov -= event.wheelDeltaY / 180;
-  camera.fov = Math.max(Math.min(camera.fov, fovMAX), fovMIN);
-  camera.updateProjectionMatrix();
-}
-
-// camera controls (ONLY LEFT RIGHT AS OF NOW)
-const d = Math.sqrt(1325);
-function calculatePos(p, t) {
-  return [
-    d * Math.cos(p) * Math.cos(t), // x
-    d * Math.sin(p),               // y
-    d * Math.cos(p) * Math.sin(t)  // z
-  ]
-}
-
-let phi = Math.acos(35 / Math.sqrt(1325));
-let theta = 0;
-function onKeyDown(event) {
-  let k = event.key;
-  if (k === 'ArrowLeft')
-    theta += 0.25;
-  else if (k === 'ArrowRight')
-    theta -= 0.25;
-
-  let [x, y, z] = calculatePos(phi, theta); 
-  camera.position.set(x, y, z);
-  camera.lookAt(0,0,0);
-}
-
-let r = 15;
-
-document.addEventListener('mousewheel', onScroll);
-document.addEventListener('keydown', onKeyDown);
 
 // Add planet functionality
+let r = 15;
 document.getElementById('add-planet').onclick = function () {
   let color = Math.random() * 0xFFC303;
   let geometry = new THREE.SphereGeometry(Math.random() * 2 + 0.5, 24, 24);
