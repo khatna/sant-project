@@ -42,7 +42,7 @@ let starField = new THREE.Points(starsGeometry, starsMaterial);
 scene.add(starField);
 
 // Adding sun
-let geometry_sun = new THREE.SphereGeometry(5, 24, 24);
+let geometry_sun = new THREE.SphereGeometry(7, 24, 24);
 let material_sun = new THREE.MeshPhongMaterial({color: 0xFFC303});
 let sun = new THREE.Mesh(geometry_sun, material_sun);
 
@@ -69,7 +69,7 @@ function makeCircle(r) {
 }
 
 let paths = [];
-paths.push(makeCircle(10));
+paths.push(makeCircle(20));
 
 let i = 0;
 function animate() {
@@ -94,7 +94,7 @@ animate();
 // User controls
 
 // Add planet functionality
-let r = 15;
+let r = 25;
 document.getElementById('add-planet').onclick = function () {
   let color = Math.random() * 0xFFC303;
   let geometry = new THREE.SphereGeometry(Math.random() * 2 + 0.5, 24, 24);
