@@ -1,5 +1,3 @@
-// const THREE = require('three');
-
 // Setting up RENDERER, SCENE AND CAMERA
 let renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -37,7 +35,7 @@ for (k = 0; k < 10000; k ++) {
 	starsGeometry.vertices.push(star);
 }
 
-let starsMaterial = new THREE.PointsMaterial({ color: 0xF0F0F0 });
+let starsMaterial = new THREE.PointsMaterial({ color: 0xFFFFFF });
 let starField = new THREE.Points(starsGeometry, starsMaterial);
 scene.add(starField);
 
@@ -92,6 +90,14 @@ function animate() {
 animate();
 
 // User controls
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  controls.handleResize();
+  renderer.render();
+}
+window.addEventListener('resize', onWindowResize, false);
 
 // Add planet functionality
 let r = 25;
