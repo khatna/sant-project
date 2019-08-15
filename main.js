@@ -60,12 +60,12 @@ function makeCircle(r) {
   let points = [];
   let incr = Math.random() * (0.1 - 0.005) + 0.005;
   let alpha = Math.random() * 2 * Math.PI;
-  let gamma = Math.random() * 2 * Math.PI;
+  let gamma = Math.random() / 6 * Math.PI;
   for (beta = 0; beta < 2 * Math.PI; beta += incr) {
     points.push([
+      r * Math.cos(alpha + beta) * Math.cos(gamma),
       r * Math.cos(alpha + beta) * Math.sin(gamma),
-      r * Math.sin(alpha + beta),
-      r * Math.cos(alpha + beta) * Math.cos(gamma)
+      r * Math.sin(alpha + beta)
     ]);
   }
   return points;
